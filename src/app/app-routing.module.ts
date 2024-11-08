@@ -8,11 +8,11 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      // {
-      //   path: '',
-      //   loadChildren: () => import('./module/home/home.module').then(m => m.HomeModule),
-      //   data: { breadcrumb: '', title: 'Home' }
-      // },
+      {
+        path: '',
+        loadChildren: () => import('./module/home/home.module').then(m => m.HomeModule),
+        data: { breadcrumb: '', title: 'Lobby' }
+      },
       // {
       //   path: 'contact',
       //   loadChildren: () => import('./module/contact/contact.module').then(m => m.ContactModule),
