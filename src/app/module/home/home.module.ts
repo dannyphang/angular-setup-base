@@ -7,11 +7,13 @@ import { CommonSharedModule } from '../../core/shared/modules/common-shared.modu
 import { ComponentsModule } from '../../core/shared/components/components.module';
 import { MaterialModule } from '../../core/shared/modules/material.module';
 import { PrimeNgModule } from '../../core/shared/modules/primeng.module';
+import { RoomComponent } from './room/room.component';
 
 
 @NgModule({
   declarations: [
     HomeComponent,
+    RoomComponent,
   ],
   imports: [
     CommonModule,

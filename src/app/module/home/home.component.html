@@ -1,0 +1,11 @@
+<div class="lobby-container">
+  <app-base-input
+    [label]="'Room ID'"
+    [fieldControl]="roomIdFormControl"
+  ></app-base-input>
+
+  <div class="tw-flex tw-mt-[var(--content-gap)] tw-justify-around">
+    <p-button [label]="'Enter Room'" (onClick)="enterRoom()"></p-button>
+    <p-button [label]="'Create Room'" (onClick)="createGame()"></p-button>
+  </div>
+</div>
