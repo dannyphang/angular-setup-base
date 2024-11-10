@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SocketioService } from '../../../core/services/socketIo.service';
+import { PlayerDto, RoomDto } from '../../../core/services/game.service';
 
 @Component({
   selector: 'app-room',
@@ -8,9 +9,10 @@ import { SocketioService } from '../../../core/services/socketIo.service';
   styleUrl: './room.component.scss'
 })
 export class RoomComponent {
-  gameId: string;
+  roomId: string;
   role = 'operative';
-  words: any;
+  room: RoomDto;
+  player: PlayerDto;
 
   constructor(
     private socketIoService: SocketioService,
@@ -18,24 +20,28 @@ export class RoomComponent {
   ) { }
 
   ngOnInit(): void {
-    this.gameId = this.route.snapshot.paramMap.get('id') ?? 'undeficed';
-    this.socketIoService.connect(this.gameId);
+    this.roomId = this.route.snapshot.paramMap.get('id') ?? 'undeficed';
+    this.player = this.socketIoService.currentPlayer;
+    this.socketIoService.connect(this.roomId);
+    this.socketIoService.playerJoinRoom(this.roomId, this.player.playerId);
     this.recieveJoinedPlayers();
     this.recieveStartGame();
     this.recieveGameUpdate();
   }
 
   nextGame() {
-    this.socketIoService.startGame(this.gameId);
+    this.socketIoService.startGame(this.roomId);
   }
 
   startGame() {
-    this.socketIoService.startGame(this.gameId);
+    // this.socketIoService.startGame(this.roomId);
+    this.room.gameStarted = true;
+    this.socketIoService.sendRoomUpdate(this.roomId, this.room);
   }
 
   clickWord(word: any) {
     word.selected = true;
-    this.socketIoService.sendGameUpdate(this.gameId, this.words);
+    this.socketIoService.sendRoomUpdate(this.roomId, this.room);
   }
 
   recieveJoinedPlayers() {
@@ -47,15 +53,18 @@ export class RoomComponent {
   }
 
   recieveStartGame() {
-    this.socketIoService.recieveStartGame().subscribe((words: any) => {
-      this.role = 'operative';
-      this.words = words;
+    this.socketIoService.recieveStartGame().subscribe((room) => {
+      this.room = room;
     });
   }
 
   recieveGameUpdate() {
-    this.socketIoService.recieveGameUpdate(this.gameId).subscribe((words: any) => {
-      this.words = words;
+    this.socketIoService.recieveRoomUpdate(this.roomId).subscribe((room) => {
+      this.room = room;
     });
+  }
+
+  updateRoom(event: any) {
+
   }
 }

@@ -1,11 +1,22 @@
 <div class="lobby-container">
+  <div class="lobby-player-div" class="tw-mb-[var(--content-gap)]">
+    <app-base-input
+      [label]="'Username'"
+      [maxLength]="50"
+      [iconLabelTooltip]="
+        'If the username is not existing in any room, the user will be able to enter any room, else the user will be bring to the room'
+      "
+    ></app-base-input>
+  </div>
+
   <app-base-input
     [label]="'Room ID'"
     [fieldControl]="roomIdFormControl"
   ></app-base-input>
 
-  <div class="tw-flex tw-mt-[var(--content-gap)] tw-justify-around">
+  <div class="tw-flex tw-mt-[var(--content-gap)] tw-justify-between">
     <p-button [label]="'Enter Room'" (onClick)="enterRoom()"></p-button>
     <p-button [label]="'Create Room'" (onClick)="createGame()"></p-button>
+    <p-button [label]="'Character'" (onClick)="character()"></p-button>
   </div>
 </div>
