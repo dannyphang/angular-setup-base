@@ -13,5 +13,15 @@ export class AppComponent {
     private translateService: TranslateService
   ) {
     this.translateService.use('en');
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      const newColorScheme = event.matches ? "dark" : "light";
+      console.log(newColorScheme)
+    });
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // dark mode
+    }
+    else {
+      // light mode
+    }
   }
 }
