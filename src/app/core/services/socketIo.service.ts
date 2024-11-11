@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
 import apiConfig from '../../../environments/apiConfig';
-import { PlayerDto, RoomDto } from './game.service';
+import { PlayerDto, RoomDto, RoomUpdateDto } from './game.service';
 
 @Injectable({
     providedIn: 'root',
@@ -11,6 +11,7 @@ import { PlayerDto, RoomDto } from './game.service';
 export class SocketioService {
     socket: Socket;
     currentPlayer: PlayerDto;
+    currentRoom: RoomDto;
 
     constructor() { }
 
@@ -22,13 +23,22 @@ export class SocketioService {
         return this.currentPlayer;
     }
 
+    set room(room: RoomDto) {
+        this.currentRoom = room;
+    }
+
+    get room(): RoomDto {
+        return this.currentRoom;
+    }
+
     connect(gameId: string) {
         this.socket = io(apiConfig.socketUrl);
         // this.socket.emit('joinRoom', { gameId: gameId });
     }
 
-    playerJoinRoom(playerId: string, roomId: string) {
-        this.socket.emit('joinRoom', { roomId: roomId, playerId: playerId });
+    playerJoinRoom(player: PlayerDto, room: RoomDto) {
+        console.log(room)
+        this.socket.emit('joinRoom', { room: room, player: player });
     }
 
     startGame(gameId: string) {
@@ -40,9 +50,9 @@ export class SocketioService {
     }
 
     recieveJoinedPlayers() {
-        return new Observable((observer) => {
-            this.socket.on('joinRoom', (message) => {
-                observer.next(message);
+        return new Observable<RoomUpdateDto>((observer) => {
+            this.socket.on('joinRoom', (room) => {
+                observer.next(room);
             });
         });
     }
@@ -56,8 +66,9 @@ export class SocketioService {
     }
 
     recieveRoomUpdate(roomId: string) {
-        return new Observable<RoomDto>((observer) => {
+        return new Observable<any>((observer) => {
             this.socket.on(roomId, (room) => {
+                console.log(room)
                 observer.next(room);
             });
         });

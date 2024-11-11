@@ -1,54 +1,67 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SocketioService } from '../../../core/services/socketIo.service';
 import { PlayerDto, RoomDto } from '../../../core/services/game.service';
+import { MessageService } from 'primeng/api';
+import { BaseCoreAbstract } from '../../../core/shared/base/base-core.abstract';
 
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
   styleUrl: './room.component.scss'
 })
-export class RoomComponent {
+export class RoomComponent extends BaseCoreAbstract {
   roomId: string;
   role = 'operative';
-  room: RoomDto;
-  player: PlayerDto;
+  room: RoomDto = new RoomDto();
+  player: PlayerDto = new PlayerDto();
 
   constructor(
     private socketIoService: SocketioService,
     private route: ActivatedRoute,
-  ) { }
+    private router: Router,
+    protected override messageService: MessageService
+  ) {
+    super(messageService);
+  }
 
   ngOnInit(): void {
+    if (this.socketIoService.currentPlayer) {
+      this.initRoom();
+    }
+    else {
+      console.log(this.socketIoService.currentPlayer)
+      // this.router.navigate(["/"]);
+    }
+  }
+
+  initRoom() {
     this.roomId = this.route.snapshot.paramMap.get('id') ?? 'undeficed';
     this.player = this.socketIoService.currentPlayer;
+    this.room = this.socketIoService.currentRoom;
+
     this.socketIoService.connect(this.roomId);
-    this.socketIoService.playerJoinRoom(this.roomId, this.player.playerId);
+
     this.recieveJoinedPlayers();
     this.recieveStartGame();
     this.recieveGameUpdate();
-  }
 
-  nextGame() {
-    this.socketIoService.startGame(this.roomId);
-  }
-
-  startGame() {
-    // this.socketIoService.startGame(this.roomId);
-    this.room.gameStarted = true;
-    this.socketIoService.sendRoomUpdate(this.roomId, this.room);
-  }
-
-  clickWord(word: any) {
-    word.selected = true;
-    this.socketIoService.sendRoomUpdate(this.roomId, this.room);
+    this.socketIoService.playerJoinRoom(this.player, this.room);
   }
 
   recieveJoinedPlayers() {
-    this.socketIoService.recieveJoinedPlayers().subscribe(message => {
-      // this.snackbar.open(message, '', {
-      //   duration: 3000,
-      // });
+    this.socketIoService.recieveJoinedPlayers().subscribe(roomU => {
+      this.popMessage(roomU.updateMessage, 'Info', 'info');
+
+      let newRoom: RoomDto = {
+        roomId: roomU.roomId,
+        statusId: 1,
+        playerList: roomU.playerList,
+        gameStarted: roomU.gameStarted
+      }
+
+      this.socketIoService.currentRoom = newRoom;
+      this.room = newRoom;
     });
   }
 
