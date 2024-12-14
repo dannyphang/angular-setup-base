@@ -33,3 +33,11 @@ export class ResponseModel<T> {
     isSuccess: boolean;
     responseMessage: string;
 }
+
+export class MessageModel {
+    message: string;
+    severity?: 'success' | 'info' | 'error';
+    key?: string;
+    icon?: string;
+    isLoading?: boolean;
+}

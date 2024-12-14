@@ -87,6 +87,7 @@ export interface OptionsModel {
     value: any;
     preIcon?: string;
     disabled?: boolean;
+    required?: boolean;
 }
 
 export interface TreeOptionsModel {
@@ -258,6 +259,9 @@ export interface BaseButtonFormConfig extends BaseFormConfig {
     type: CONTROL_TYPE.Button;
     label?: string;
     outlined?: boolean;
+    isTextStyle?: boolean;
+    rounded?: boolean;
+    loading?: boolean;
     onClickFunc: (e?: any) => void;
     actionPermission?: {
         actionType: string | string[];
