@@ -36,6 +36,8 @@ export class BaseInputComponent
 
   paddingForPrefix = 10;
 
+  showPassword: boolean = false;
+
   ngOnInit() {
     if (this.mode === 'number') {
       this.fieldControl.setValue(this.fieldControl.value ?? undefined, {

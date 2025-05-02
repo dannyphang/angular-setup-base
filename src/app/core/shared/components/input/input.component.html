@@ -21,6 +21,21 @@
       class="tw-cursor-pointer"
       (click)="clearField()"
     />
+
+    <p-inputIcon
+      styleClass="pi pi-eye-slash"
+      *ngIf="mode === 'password' && showPassword"
+      class="tw-cursor-pointer"
+      (click)="showPassword = !showPassword"
+    />
+
+    <p-inputIcon
+      styleClass="pi pi-eye"
+      *ngIf="mode === 'password' && !showPassword"
+      class="tw-cursor-pointer"
+      (click)="showPassword = !showPassword"
+    />
+
     <div
       class="input-container"
       *ngIf="
