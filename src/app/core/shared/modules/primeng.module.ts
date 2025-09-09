@@ -43,8 +43,12 @@ import { DragDropModule } from 'primeng/dragdrop';
 import { PickListModule } from 'primeng/picklist';
 import { DividerModule } from 'primeng/divider';
 import { TreeSelectModule } from 'primeng/treeselect';
+import { ChipsModule } from 'primeng/chips';
+import { MessagesModule } from 'primeng/messages';
+import { ColorPickerModule } from 'primeng/colorpicker';
+import { ChartModule } from 'primeng/chart';
 
-import { MessageService } from 'primeng/api';
+import { MessageService as PrimeNGMessage } from 'primeng/api';
 
 const PRIMENG_MODULES = [
     InputNumberModule,
@@ -91,7 +95,11 @@ const PRIMENG_MODULES = [
     DragDropModule,
     PickListModule,
     DividerModule,
-    TreeSelectModule
+    TreeSelectModule,
+    ChipsModule,
+    MessagesModule,
+    ColorPickerModule,
+    ChartModule,
 ]
 
 @NgModule({
@@ -102,8 +110,8 @@ const PRIMENG_MODULES = [
         PRIMENG_MODULES
     ],
     providers: [
-        MessageService,
-        TerminalService
+        PrimeNGMessage,
+        TerminalService,
     ]
 })
 

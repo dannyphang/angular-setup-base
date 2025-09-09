@@ -1,12 +1,27 @@
-<div *ngFor="let key of objectKeys(messageGroups)">
-  <p-toast [key]="key">
-    <ng-template let-message pTemplate="message">
-      <div class="toast-div tw-flex">
-        <div class="tw-grid tw-items-center">
-          <span [class]="message.icon"></span>
+<div class="toast-container top-right">
+  <div
+    *ngFor="let toast of toastList; trackBy: trackByKey"
+    class="toast-wrapper"
+    @fadeSlide
+  >
+    <p-messages [severity]="toast.severity">
+      <ng-template pTemplate="content">
+        <div class="toast-div tw-flex">
+          <div class="message-div tw-gap-[var(--content-gap)] tw-flex">
+            <div class="tw-grid tw-items-center">
+              <span [class]="toast.icon"></span>
+            </div>
+            <div>{{ toast.message }}</div>
+          </div>
+          <div class="close-icon tw-flex tw-items-center">
+            <i
+              class="pi pi-times"
+              (click)="removeToast(toast.key)"
+              style="cursor: pointer"
+            ></i>
+          </div>
         </div>
-        <div>{{ message.detail }}</div>
-      </div>
-    </ng-template>
-  </p-toast>
+      </ng-template>
+    </p-messages>
+  </div>
 </div>

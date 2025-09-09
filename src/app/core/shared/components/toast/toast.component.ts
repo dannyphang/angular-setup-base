@@ -1,44 +1,41 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Message, MessageService } from 'primeng/api';
+import { Component, OnInit } from '@angular/core';
+import { MessageModel } from '../../../services/core-http.service';
+import { ToastService } from '../../../services/toast.service';
+import { trigger, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-toast',
   templateUrl: './toast.component.html',
-  styleUrls: ['./toast.component.scss']
+  styleUrls: ['./toast.component.scss'],
+  animations: [
+    trigger('fadeSlide', [
+      // appear
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-8px)' }),
+        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      // disappear
+      transition(':leave', [
+        animate('250ms ease-in', style({ opacity: 0, transform: 'translateY(-6px)' }))
+      ]),
+    ])
+  ]
 })
 export class ToastComponent implements OnInit {
-  messageGroups: { [key: string]: Message[] } = {};
+  toastList: MessageModel[] = [];
 
-  constructor(
-    private messageService: MessageService,
-  ) { }
+  constructor(private toastService: ToastService) { }
 
   ngOnInit() {
-    // Prevent duplicate subscriptions
-    this.messageService.messageObserver.subscribe(
-      (value: Message | Message[]) => {
-        if (Array.isArray(value)) {
-          value.forEach((message) => this.groupMessageByKey(message));
-        } else {
-          this.groupMessageByKey(value);
-        }
-      }
-    );
+    this.toastService.toastList$.subscribe(list => {
+      this.toastList = list;
+    });
   }
 
-  private groupMessageByKey(message: Message) {
-    const key = message.key || 'defaultKey';
-
-    // Initialize group if it does not exist
-    if (!this.messageGroups[key]) {
-      this.messageGroups[key] = [];
-    }
-
-    this.messageGroups[key].push(message);
+  removeToast(key: string) {
+    // Just remove it; the wrapper's :leave animation will run before DOM removal
+    this.toastService.clear(key);
   }
 
-  // Helper function to get object keys
-  objectKeys(obj: any): string[] {
-    return Object.keys(obj);
-  }
+  trackByKey = (_: number, t: MessageModel) => t.key;
 }

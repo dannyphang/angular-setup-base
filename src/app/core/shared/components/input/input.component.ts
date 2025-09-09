@@ -10,7 +10,7 @@ import { EMAIL_REGEX, URL_REGEX } from '../../constants/common.constants';
 export class BaseInputComponent
   extends BaseFieldControlComponent
   implements OnInit {
-  @Input() mode: 'text' | 'number' | 'password' | 'switch' | 'label-text' | 'email' | 'url' | 'phone' =
+  @Input() mode: 'text' | 'number' | 'password' | 'switch' | 'label-text' | 'email' | 'url' | 'phone' | 'chips' =
     'text';
   @Input() iconUrl!: string;
   @Input() leftIconUrl!: string;
@@ -30,13 +30,12 @@ export class BaseInputComponent
   @Input() autoFocus: boolean = false;
   @Input() iconLeftStyle: string = '';
   @Input() iconRightStyle: string = '';
-  @Input() showClear: boolean = false;
+  @Input() seperator: string = ' ';
+  @Input() isValidPassword: boolean = true;
   @ViewChild('prefix_content', { static: true })
   prefix_content!: ElementRef<HTMLDivElement>;
 
   paddingForPrefix = 10;
-
-  showPassword: boolean = false;
 
   ngOnInit() {
     if (this.mode === 'number') {
@@ -67,14 +66,21 @@ export class BaseInputComponent
       });
     }
 
+    // validate password 
+    if (this.mode === 'password') {
+      this.fieldControl.valueChanges.subscribe(val => {
+        if (val?.length === 0 && this.required) {
+          this.fieldControl.setErrors({
+            require: true
+          });
+        }
+      });
+    }
+
     this.paddingForPrefix = this.prefix_content?.nativeElement.clientWidth;
   }
 
   onBlur() {
     if (!!this.onBlurFunction) return this.onBlurFunction();
-  }
-
-  clearField() {
-    this.fieldControl.setValue(null, { emitEvent: false });
   }
 }

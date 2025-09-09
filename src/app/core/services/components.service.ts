@@ -85,8 +85,16 @@ interface ErrorMessageList {
 export interface OptionsModel {
     label?: string;
     value: any;
-    preIcon?: string;
+    preIcon?: string | {
+        icon?: string;
+        style?: IconStyle;
+    };
     disabled?: boolean;
+    required?: boolean;
+}
+
+export interface IconStyle {
+    [key: string]: string;
 }
 
 export interface TreeOptionsModel {
@@ -104,7 +112,7 @@ export interface BaseInputTextConfig {
 
 export interface BaseInputFormConfig extends BaseFormConfig, BaseInputTextConfig {
     type: CONTROL_TYPE.Textbox;
-    mode?: 'text' | 'number' | 'password' | 'switch' | 'label-text' | 'email' | 'url' | 'phone';
+    mode?: 'text' | 'number' | 'password' | 'switch' | 'label-text' | 'email' | 'url' | 'phone' | 'chips';
     prefix?: string;
     suffix?: string;
     onlyNumber?: boolean;
@@ -117,7 +125,8 @@ export interface BaseInputFormConfig extends BaseFormConfig, BaseInputTextConfig
     content?: string;
     descriptionMessage?: string;
     labelTextStyle?: string;
-    showClear?: boolean;
+    seperator?: string;
+    isValidPassword?: boolean;
 }
 
 export interface BaseDatepickerFormConfig extends BaseFormConfig {
@@ -129,6 +138,7 @@ export interface BaseDatepickerFormConfig extends BaseFormConfig {
     view?: string;
     showTime?: boolean;
     timeOnly?: boolean;
+    showSeconds?: boolean;
 }
 
 export interface BaseTextAreaFormConfig extends BaseFormConfig, BaseInputTextConfig {
@@ -196,6 +206,7 @@ export type BaseMultiselectFormConfig = BaseSelectFormConfig & {
     sortOption?: boolean;
     group?: boolean;
     showClear?: boolean;
+    showChips?: boolean;
 };
 
 export type BaseCheckBoxFormConfig = BaseSelectFormConfig & {
@@ -259,12 +270,16 @@ export interface BaseButtonFormConfig extends BaseFormConfig {
     type: CONTROL_TYPE.Button;
     label?: string;
     outlined?: boolean;
+    isTextStyle?: boolean;
+    rounded?: boolean;
+    loading?: boolean;
     onClickFunc: (e?: any) => void;
     actionPermission?: {
         actionType: string | string[];
         moduleCode?: string;
         createdBy?: string;
     };
+    severity?: 'primary' | 'secondary';
 }
 
 export const BASE_UI_TOKEN = new InjectionToken('BASE_UI_TOKEN');
@@ -310,27 +325,31 @@ export interface BaseTabMenuItem extends MenuItem {
     actionType?: string | string[];
 }
 
-export interface ProtertiesDto {
-    propertyId: string;
-    uid: string;
-    name: string;
-    code: string;
-    type: string;
-    isSystem: boolean;
-    isMandatory: boolean;
-    isEditable: boolean;
-    isVisiable: boolean;
-    moduleCode: string;
-    order: number;
-    statusID: number;
-    createdDate: Date;
-    createdBy: string;
-    modifiedDate: Date;
-    modifiedBy: string;
-}
-
 export interface TableConfig {
     header?: string;
     code: string;
     icon?: string;
+}
+
+export interface EditorToolbarSetupDto {
+    bold?: boolean;
+    italic?: boolean;
+    underline?: boolean;
+    strike?: boolean;
+    orderedList?: boolean;
+    bulletList?: boolean;
+    checklist?: boolean;
+    link?: boolean;
+    image?: boolean;
+    video?: boolean;
+    clean?: boolean;
+    blockquote?: boolean;
+    codeBlock?: boolean;
+    align?: boolean;
+    size?: boolean;
+    font?: boolean;
+    color?: boolean;
+    backgroundColor?: boolean;
+    header?: boolean;
+    formula?: boolean;
 }

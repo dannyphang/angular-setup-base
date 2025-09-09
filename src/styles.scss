@@ -15,9 +15,13 @@
 @import "../node_modules/quill/dist/quill.snow.css";
 
 :root {
+  --content-gap-xxl: 24px;
+  --content-gap-xl: 20px;
+  --content-gap-l: 18px;
   --content-gap: 15px;
   --content-gap-s: 8px;
   --content-gap-xs: 6px;
+  --content-gap-xxs: 2px;
 }
 
 html {
@@ -34,4 +38,10 @@ body {
   min-height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.text-hidden-dots {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
