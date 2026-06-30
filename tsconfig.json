@@ -9,6 +9,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
+    "paths": {
+      "ngx-setup-base": ["./dist/ngx-setup-base"]
+    },
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "sourceMap": true,
@@ -28,5 +31,13 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "references": [
+    {
+      "path": "./projects/ngx-co-base/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ngx-co-base/tsconfig.spec.json"
+    }
+  ]
 }
